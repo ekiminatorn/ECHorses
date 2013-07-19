@@ -9,6 +9,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 public class ECHorsesListeners implements Listener {
@@ -42,10 +43,24 @@ public class ECHorsesListeners implements Listener {
         		  return;
         	  }
           } 
-       p.sendMessage("[ECHorses] This horse is untamed!"); 
+       p.sendMessage(ChatColor.GREEN + "This horse is untamed!"); 
       }	
 		
 	}
 }
+@EventHandler
+public void horseTameEvent(EntityTameEvent event){
+     
+	 if(event.getEntityType() == EntityType.HORSE){
+		 Player p = (Player)event.getOwner();
+		 p.sendMessage(ChatColor.GREEN + "You have succesfully protected this horse!"); 	 
+	 }	
+}
+
+
+
+
+
+
 
 }
