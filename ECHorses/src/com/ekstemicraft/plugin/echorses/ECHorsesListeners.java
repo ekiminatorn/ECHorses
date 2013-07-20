@@ -2,14 +2,21 @@ package com.ekstemicraft.plugin.echorses;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTameEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 public class ECHorsesListeners implements Listener {
@@ -37,13 +44,13 @@ public class ECHorsesListeners implements Listener {
         	  return;
         	  }
         	  else {
-        		  p.sendMessage(ChatColor.RED + "[ECHorses] This horse is owned by " + h.getOwner().getName());
-        		  Bukkit.getLogger().info("[ECHorses]" + playername + "tried entering someone elses horse");
+        		  p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " This horse is owned by " + h.getOwner().getName());
+        		  Bukkit.getLogger().info("[ECHorses] " + playername + "tried entering someone elses horse");
         		  event.setCancelled(true);
         		  return;
         	  }
           } 
-       p.sendMessage(ChatColor.GREEN + "This horse is untamed!"); 
+       p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " This horse is untamed!"); 
       }	
 		
 	}
@@ -53,11 +60,43 @@ public void horseTameEvent(EntityTameEvent event){
      
 	 if(event.getEntityType() == EntityType.HORSE){
 		 Player p = (Player)event.getOwner();
-		 p.sendMessage(ChatColor.GREEN + "You have succesfully protected this horse!"); 	 
+		 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " You have succesfully protected this horse!");
+		 
 	 }	
 }
+@EventHandler
+public void horseDamageByEntity(EntityDamageByEntityEvent event){
+	if(event.getEntityType() == EntityType.HORSE){
+		Player p = (Player)event.getDamager();
+		Horse h = (Horse)event.getEntity();				
+		if(event.getDamager().getType() == EntityType.PLAYER){ //Playercheck
 
-
+			if(p.isOp() || p.hasPermission("echorse.override") || h.getOwner() == null){ //Op & permission check & if horse isnt tamed.
+				return;
+			}
+			 if(!(h.getOwner().getName() == p.getName())){ //If its not the horse owner, cancel the event
+				 event.setCancelled(true);
+				 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " You dont have permission to hurt " + h.getOwner().getName() + "s horse!" );
+			 }
+		}		
+	return;	
+	}	
+}
+@EventHandler
+public void horseDamageByProjectile(EntityDamageEvent event){
+	if (event instanceof EntityDamageByEntityEvent){
+	if(((EntityDamageByEntityEvent) event).getDamager() instanceof Arrow && event.getEntity() instanceof Horse){
+		Arrow a = (Arrow)((EntityDamageByEntityEvent) event).getDamager();
+		if(a.getShooter() instanceof Player){
+			Player p = (Player)a.getShooter();
+			Horse h = (Horse)event.getEntity();
+			
+		}
+		
+	}
+  }
+	
+}
 
 
 
