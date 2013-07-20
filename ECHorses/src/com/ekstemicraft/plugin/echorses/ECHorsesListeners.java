@@ -67,36 +67,37 @@ public void horseTameEvent(EntityTameEvent event){
 @EventHandler
 public void horseDamageByEntity(EntityDamageByEntityEvent event){
 	if(event.getEntityType() == EntityType.HORSE){
-		Player p = (Player)event.getDamager();
-		Horse h = (Horse)event.getEntity();				
+		Horse h = (Horse)event.getEntity();
+		
+		//Handle arrow shots from players
+		if(event.getDamager().getType() == EntityType.ARROW){ //Arrowcheck
+			Arrow a = (Arrow)event.getDamager();
+			if(a.getShooter() instanceof Player){
+				if(h.getOwner() == null){
+					return;
+				}
+				event.setCancelled(true);
+				return;
+			}
+		}
+		
+		//Handle melee attack direct from player
 		if(event.getDamager().getType() == EntityType.PLAYER){ //Playercheck
-
+			Player p = (Player)event.getDamager();
+             
 			if(p.isOp() || p.hasPermission("echorse.override") || h.getOwner() == null){ //Op & permission check & if horse isnt tamed.
 				return;
 			}
 			 if(!(h.getOwner().getName() == p.getName())){ //If its not the horse owner, cancel the event
 				 event.setCancelled(true);
 				 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " You dont have permission to hurt " + h.getOwner().getName() + "s horse!" );
+				 return;
 			 }
 		}		
 	return;	
 	}	
 }
-@EventHandler
-public void horseDamageByProjectile(EntityDamageEvent event){
-	if (event instanceof EntityDamageByEntityEvent){
-	if(((EntityDamageByEntityEvent) event).getDamager() instanceof Arrow && event.getEntity() instanceof Horse){
-		Arrow a = (Arrow)((EntityDamageByEntityEvent) event).getDamager();
-		if(a.getShooter() instanceof Player){
-			Player p = (Player)a.getShooter();
-			Horse h = (Horse)event.getEntity();
-			
-		}
-		
-	}
-  }
-	
-}
+
 
 
 
