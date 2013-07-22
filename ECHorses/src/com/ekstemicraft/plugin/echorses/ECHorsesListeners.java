@@ -1,8 +1,12 @@
 package com.ekstemicraft.plugin.echorses;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.block.Block;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
@@ -15,10 +19,16 @@ import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 public class ECHorsesListeners implements Listener {
+	
+	ECHorses pl;
+	public ECHorsesListeners(ECHorses plugin){
+		pl = plugin;
+	}
+	
 		
 @EventHandler
 	public void horseEnter(VehicleEnterEvent event){
-	
+
 	if(event.getVehicle() instanceof Horse){
 
       EntityType entered = (EntityType)event.getEntered().getType();
@@ -30,9 +40,32 @@ public class ECHorsesListeners implements Listener {
 		Server server = p.getServer(); //Not used for now
           Horse h = (Horse)event.getVehicle();
           AnimalTamer owner = h.getOwner();
+          HashMap<String, ArrayList<Block>> map = ECHorses.hashmap; //Getting hashmap from main class
+          if(map.containsKey(playername)){ //If player has done /horseunclaim, then when the player left click the horse, unclaim the horse.
+        	  if(owner == null){
+        		  p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " Nobody owns this horse!");
+        		  return;
+        	  }
+        	  if(!(owner == null)){
+        		  if(p.isOp() || p.hasPermission("echorse.override")){
+        			  p.sendMessage("You are overriding horse protection!");
+        			  h.setOwner(null); //Removing horse claim (untame horse)
+        			  map.remove(playername); //Remove the player from hashmap.
+        			  return;
+        		  }
+        		 if(h.getOwner().getName() == p.getName()){ //Owner check
+        			 h.setOwner(null); //Remove horse claim (untame horse.)
+        			 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " Successfully removed horse protection. (Horse is not tamed anymore)");
+        			 map.remove(playername); //Remove the player from hashmap.
+        			 event.setCancelled(true);
+        			 return;
+        		 }		  
+        	  }
+          }    
+          //Horse stealing protection (Entering the horse)
           if(!(owner == null)){
         	  
-        	  if(p.isOp() && p.hasPermission("echorse.override")){ //Overriding the protection if player is OP
+        	  if(p.isOp() || p.hasPermission("echorse.override")){ //Overriding the protection if player is OP
         		  return;
         	  }
         	  if(h.getOwner().getName() == p.getName()){ //Checking if entering player is the owner
@@ -46,16 +79,16 @@ public class ECHorsesListeners implements Listener {
         	  }
           } 
        p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " This horse is untamed!"); 
-      }	
-		
+      }		
 	}
 }
 @EventHandler
-public void horseTameEvent(EntityTameEvent event){
+public void horseTameEvent(EntityTameEvent event){ 
      
 	 if(event.getEntityType() == EntityType.HORSE){
 		 Player p = (Player)event.getOwner();
-		 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " You have succesfully protected this horse!");
+		 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GOLD + " You have succesfully protected this horse!");
+		 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " To unclaim your horse, use /horseunclaim");
 		 
 	 }	
 }
@@ -91,11 +124,5 @@ public void horseDamageByEntity(EntityDamageByEntityEvent event){
 		}		
 	return;	
 	}	
-}
-
-
-
-
-
-
+ }
 }
