@@ -44,20 +44,30 @@ public final class ECHorses extends JavaPlugin{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
 		if(cmd.getName().equalsIgnoreCase("horseunclaim")){  //Player or console executes command
 		String player = sender.getName();
-	
+		if(hashmap.containsKey(player)){
+			hashmap.remove(player);
+			sender.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GOLD + " Horse unclaim mode disabled!");
+			return true;
+		}
+		else
 			hashmap.put(player, null);
 			sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.GREEN + "Left click the horse to unclaim the horse.");
-			//adding later? sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.RED + "NOTE: Unclaiming a horse will remove its tamed status!");
-			//Adding later? sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.RED + "If you dont want to unclaim your horse, please execute /horseunclaim again!");
+			sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.RED + "NOTE: Unclaiming a horse will remove its tamed status!");
+			sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.RED + "If you dont want to unclaim your horse, please execute /horseunclaim again!");
 			return true;
 		}
 		if(cmd.getName().equalsIgnoreCase("huc")){  //Player or console executes command
-			
 			String player = sender.getName();
+			if(hashmap.containsKey(player)){
+				hashmap.remove(player);
+				sender.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GOLD + " Horse unclaim mode disabled!");
+				return true;
+			}
+			else
 				hashmap.put(player, null);
 				sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.GREEN + "Left click the horse to unclaim the horse.");
-				//Adding later? sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.RED + "NOTE: Unclaiming a horse will remove its tamed status!");
-				//Adding later? sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.RED + "If you dont want to unclaim your horse, please execute /horseunclaim again!");
+				sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.RED + "NOTE: Unclaiming a horse will remove its tamed status!");
+				sender.sendMessage(ChatColor.AQUA + "[ECHorses] " + ChatColor.RED + "If you dont want to unclaim your horse, please execute /horseunclaim again!");
 				return true;
 			}
 	return false;

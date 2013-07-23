@@ -73,7 +73,7 @@ public class ECHorsesListeners implements Listener {
         				h.setCarryingChest(false); //if true then remove the chest.
         			}
         			 h.setOwner(null); //Remove horse claim (untame horse.)
-        			 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " Successfully removed horse protection. (Horse is not tamed anymore)");
+        			 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GOLD + " Successfully removed horse protection. (Horse is not tamed anymore)");
         			 map.remove(playername); //Remove the player from hashmap.
         			 event.setCancelled(true);
         			 return;
