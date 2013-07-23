@@ -5,10 +5,13 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
@@ -18,6 +21,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class ECHorsesListeners implements Listener {
 	
@@ -45,6 +50,7 @@ public class ECHorsesListeners implements Listener {
           if(map.containsKey(playername)){ //If player has done /horseunclaim, then when the player left click the horse, unclaim the horse.
         	  if(owner == null){
         		  p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " Nobody owns this horse!");
+
         		  return;
         	  }
         	  if(!(owner == null)){
@@ -55,6 +61,17 @@ public class ECHorsesListeners implements Listener {
         			  return;
         		  }
         		 if(h.getOwner().getName() == p.getName()){ //Owner check
+        			Location loc = h.getLocation().clone();
+        			Inventory inv = h.getInventory();
+        			for (ItemStack item : inv.getContents()){ //Checking if the horse has saddle & armor & or something its inventory (Donkey)
+        				if(item!= null){
+        					loc.getWorld().dropItemNaturally(loc, item.clone()); //Drops all the inventory contents on the horse location ground.
+        				}
+        			}
+        			inv.clear(); //Clears the inventory of the horse.
+        			if(h.isCarryingChest()){ //If the horse is carrying a chest (Donkey)
+        				h.setCarryingChest(false); //if true then remove the chest.
+        			}
         			 h.setOwner(null); //Remove horse claim (untame horse.)
         			 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.GREEN + " Successfully removed horse protection. (Horse is not tamed anymore)");
         			 map.remove(playername); //Remove the player from hashmap.
