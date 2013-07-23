@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTameEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 public class ECHorsesListeners implements Listener {
@@ -73,7 +74,7 @@ public class ECHorsesListeners implements Listener {
         	  }
         	  else {
         		  p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " This horse is owned by " + h.getOwner().getName());
-        		  Bukkit.getLogger().info("[ECHorses] " + playername + "tried entering someone elses horse");
+        		  Bukkit.getLogger().info("[ECHorses] " + playername + " tried entering someone elses horse");
         		  event.setCancelled(true);
         		  return;
         	  }
@@ -124,5 +125,31 @@ public void horseDamageByEntity(EntityDamageByEntityEvent event){
 		}		
 	return;	
 	}	
- }
+}
+ /*
+ HORSE API NOT COMPLETE YET (?) WAITING FOR IT
+
+@EventHandler
+public void protectHorseInventory(InventoryOpenEvent event){
+	
+Bukkit.broadcastMessage("InventoryOpenEvent");
+	if(event.getInventory().getHolder() instanceof Horse){
+		Bukkit.broadcastMessage("After horse check");
+		Horse h = (Horse)event.getInventory().getHolder();
+		Player p = (Player) event.getPlayer();
+		String playername = event.getPlayer().getName();
+		if(p.isOp() || p.hasPermission("echorse.override")){ //Op & permission check
+			return;
+		}
+		if(!(h.getOwner().getName() == playername)){ //Not the horse owner, cancel event
+				
+			event.setCancelled(true);
+			p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " You dont have permission to open " + h.getOwner().getName() + "s horse inventory!");
+			return;
+		}
+		return;
+	}
+	return;	
+}
+*/
 }
