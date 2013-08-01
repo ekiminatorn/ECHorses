@@ -7,11 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
@@ -143,9 +141,9 @@ public void horseDamageByEntity(EntityDamageByEntityEvent event){
 	return;	
 	}	
 }
- /*
- HORSE API NOT COMPLETE YET (?) WAITING FOR IT
+ 
 
+//Protect horse inventory stealing
 @EventHandler
 public void protectHorseInventory(InventoryOpenEvent event){
 	
@@ -168,5 +166,5 @@ Bukkit.broadcastMessage("InventoryOpenEvent");
 	}
 	return;	
 }
-*/
+
 }
