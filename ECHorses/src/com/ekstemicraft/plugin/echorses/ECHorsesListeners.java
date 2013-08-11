@@ -134,7 +134,7 @@ public void horseDamageByEntity(EntityDamageByEntityEvent event){
 			}
 			 if(!(h.getOwner().getName() == p.getName())){ //If its not the horse owner, cancel the event
 				 event.setCancelled(true);
-				 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " You dont have permission to hurt " + h.getOwner().getName() + "s horse!" );
+				 p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " You dont have permission to hurt " + h.getOwner().getName() + "'s horse!" );
 				 return;
 			 }
 		}		
@@ -146,10 +146,7 @@ public void horseDamageByEntity(EntityDamageByEntityEvent event){
 //Protect horse inventory stealing
 @EventHandler
 public void protectHorseInventory(InventoryOpenEvent event){
-	
-Bukkit.broadcastMessage("InventoryOpenEvent");
 	if(event.getInventory().getHolder() instanceof Horse){
-		Bukkit.broadcastMessage("After horse check");
 		Horse h = (Horse)event.getInventory().getHolder();
 		Player p = (Player) event.getPlayer();
 		String playername = event.getPlayer().getName();
@@ -159,7 +156,7 @@ Bukkit.broadcastMessage("InventoryOpenEvent");
 		if(!(h.getOwner().getName() == playername)){ //Not the horse owner, cancel event
 				
 			event.setCancelled(true);
-			p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " You dont have permission to open " + h.getOwner().getName() + "s horse inventory!");
+			p.sendMessage(ChatColor.AQUA + "[ECHorses]" + ChatColor.RED + " You dont have permission to open " + h.getOwner().getName() + "'s horse inventory!");
 			return;
 		}
 		return;
